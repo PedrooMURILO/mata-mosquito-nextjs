@@ -128,19 +128,16 @@ export function useJogo() {
     }
 
     setInsetos(prev => {
-      // Remove insetos anteriores que ainda estejam na tela e penaliza vidas
-      // (mosquito escapou = perdeu vida; borboleta escapou = sem penalidade)
-      const escaparam = prev.filter(i => i.tipo === 'mosquito')
+      console.log('spawn chamado, insetos na tela:', prev)
+      const mosquitoEscapou = prev.some(i => i.tipo === 'mosquito')
+      console.log('mosquitoEscapou:', mosquitoEscapou, '| vidas:', vidasRef.current)
 
-      if (escaparam.length > 0) {
-        const novasVidas = vidasRef.current - escaparam.length
-
+      if (mosquitoEscapou) {
+        const novasVidas = vidasRef.current - 1
         if (novasVidas <= 0) {
-          // Sem vidas — encerra o jogo
           encerrarJogo()
           return []
         }
-
         atualizarVidas(novasVidas)
       }
 
@@ -204,17 +201,16 @@ export function useJogo() {
 
   // --- Inicializa o jogo ---
   useEffect(() => {
-    // Define o intervalo inicial baseado no nível
     intervaloAtualRef.current = INTERVALO_INICIAL[nivel] ?? 1500
 
-    // Spawna o primeiro inseto imediatamente
-    spawnInseto()
+    // Aguarda um tick antes de começar para o componente estar montado
+    const inicio = setTimeout(() => {
+      spawnInseto()
+      spawnIntervalRef.current = setInterval(spawnInseto, intervaloAtualRef.current)
+    }, 100)
 
-    // Inicia o intervalo de spawn
-    reiniciarIntervalo()
-
-    // Limpa o intervalo ao desmontar o componente
     return () => {
+      clearTimeout(inicio)
       if (spawnIntervalRef.current) clearInterval(spawnIntervalRef.current)
     }
   }, [])
