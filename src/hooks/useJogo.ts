@@ -99,7 +99,7 @@ export function useJogo() {
     setKills(novosKills)
 
     // Ao atingir 50 kills, entra na fase bônus — sem parar o jogo
-    if (novosKills >= 10 && !faseBonusRef.current) {
+    if (novosKills >= 50 && !faseBonusRef.current) {
       faseBonusRef.current = true
       setFaseBonus(true)
     }
