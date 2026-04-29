@@ -14,13 +14,11 @@ export default function LoginPage() {
     setErro('')
 
     if (modo === 'cadastro') {
-      const { error } = await supabase
-        .from('users')
-        .insert({ username, password })
+      const { error } = await supabase.from('users').insert({ username, password })
 
       if (error) {
-        console.log(error);
-        
+        console.log(error)
+
         if (error.code === '23505') return setErro('Nome de usuário já existe')
         return setErro('Erro ao cadastrar')
       }
@@ -42,9 +40,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <h1 className="text-2xl font-bold">
-        {modo === 'login' ? 'Entrar' : 'Cadastrar'}
-      </h1>
+      <h1 className="text-2xl font-bold">{modo === 'login' ? 'Entrar' : 'Cadastrar'}</h1>
 
       <input
         className="border p-2 rounded w-64"
@@ -62,10 +58,7 @@ export default function LoginPage() {
 
       {erro && <p className="text-red-500 text-sm">{erro}</p>}
 
-      <button
-        className="bg-red-600 text-white px-6 py-2 rounded font-bold"
-        onClick={handleSubmit}
-      >
+      <button className="bg-red-600 text-white px-6 py-2 rounded font-bold" onClick={handleSubmit}>
         {modo === 'login' ? 'Entrar' : 'Cadastrar'}
       </button>
 

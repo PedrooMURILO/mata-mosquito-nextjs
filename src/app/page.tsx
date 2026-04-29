@@ -1,65 +1,134 @@
-import Image from "next/image";
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function Home() {
+interface MosquitoDecorativo {
+  id: number
+  size: number
+  x: number
+  y: number
+}
+
+function gerarMosquitos(): MosquitoDecorativo[] {
+  return Array.from({ length: 3 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 60 + 40,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+  }))
+}
+
+export default function MenuPage() {
+  const router = useRouter()
+  const [nivel, setNivel] = useState('')
+  const [username, setUsername] = useState<string | null>(null)
+  const [mosquitos, setMosquitos] = useState<MosquitoDecorativo[]>([])
+  const [toast, setToast] = useState(false)
+  const [shake, setShake] = useState(false)
+
+  useEffect(() => {
+    setUsername(sessionStorage.getItem('username'))
+    setMosquitos(gerarMosquitos())
+  }, [])
+
+  function iniciarJogo() {
+    if (!nivel) {
+      setToast(true)
+      setShake(true)
+      setTimeout(() => setToast(false), 3000)
+      setTimeout(() => setShake(false), 500)
+      return
+    }
+    if (!username) return router.push('/login')
+    sessionStorage.setItem('nivel', nivel)
+    router.push('/jogo')
+  }
+
+  function sair() {
+    sessionStorage.clear()
+    setUsername(null)
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* Mosquitos de fundo */}
+      {mosquitos.map(m => (
+        <img
+          key={m.id}
+          src="/imagens/mosquito.png"
+          className="bg-mosquito"
+          style={{ width: m.size, height: m.size, left: `${m.x}%`, top: `${m.y}%` }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+      ))}
+
+      {/* Toast */}
+      <div className={`custom-toast${toast ? ' show' : ''}`}>
+        <span style={{ fontSize: '1.5rem' }}>⚠️</span>
+        Selecione um nível de dificuldade!
+      </div>
+
+      {/* Card central */}
+      <div className="custom-card" style={{ minWidth: 380 }}>
+        <div className="game-title">
+          MATA <br />
+          <span style={{ color: '#fff' }}>MOSQUITO</span>
+        </div>
+
+        <div className="mission-box">
+          <h5>📍 Missão do Dia</h5>
+          <p>
+            João Farias está fazendo uma limpa no fundo da casa dele e precisa enfrentar a dengue.
+            Ajude-o nesta batalha!
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className={`difficulty-container${shake ? ' shake' : ''}`}>
+          {['normal', 'dificil', 'chucknorris'].map(n => (
+            <button
+              key={n}
+              className={`btn-difficulty${nivel === n ? ' active' : ''}`}
+              onClick={() => setNivel(n)}
+            >
+              {n === 'normal' ? 'Normal' : n === 'dificil' ? 'Difícil' : 'Chuck Norris'}
+            </button>
+          ))}
         </div>
-      </main>
-    </div>
-  );
+
+        <button className="btn-game" onClick={iniciarJogo}>
+          INICIAR JOGO
+        </button>
+
+        <div
+          style={{
+            marginTop: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.75rem',
+          }}
+        >
+          {username ? (
+            <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>
+              Olá, <strong style={{ color: '#f1c40f' }}>{username}</strong>
+            </span>
+          ) : null}
+
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            {username ? (
+              <button className="btn-secondary" onClick={sair}>
+                Sair
+              </button>
+            ) : (
+              <button className="btn-secondary" onClick={() => router.push('/login')}>
+                Entrar / Cadastrar
+              </button>
+            )}
+            <button className="btn-secondary" onClick={() => router.push('/ranking')}>
+              Ranking
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }
