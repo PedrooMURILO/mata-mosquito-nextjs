@@ -59,6 +59,7 @@ export default function LoginPage() {
       if (error || !data) return setErro('Usuário ou senha incorretos')
     }
 
+    document.cookie = `username=${username}; path=/`
     sessionStorage.setItem('username', username)
     router.push('/')
   }

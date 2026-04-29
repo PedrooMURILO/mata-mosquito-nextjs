@@ -46,6 +46,7 @@ export default function MenuPage() {
 
   function sair() {
     sessionStorage.clear()
+    document.cookie = 'username=; path=/; max-age=0'
     setUsername(null)
   }
 
