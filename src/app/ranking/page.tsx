@@ -15,7 +15,7 @@ interface ScoreEntry {
 const NIVEIS = [
   { key: 'normal', label: 'Normal', cor: '#2ed573' },
   { key: 'dificil', label: 'Difícil', cor: '#f1c40f' },
-  { key: 'chucknorris', label: 'Chuck Norris', cor: '#e74c3c' },
+  { key: 'chucknorris', label: 'Impossível', cor: '#e74c3c' },
 ]
 
 function posicaoCor(index: number) {

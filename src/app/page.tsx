@@ -89,7 +89,7 @@ export default function MenuPage() {
               className={`btn-difficulty${nivel === n ? ' active' : ''}`}
               onClick={() => setNivel(n)}
             >
-              {n === 'normal' ? 'Normal' : n === 'dificil' ? 'Difícil' : 'Chuck Norris'}
+              {n === 'normal' ? 'Normal' : n === 'dificil' ? 'Difícil' : 'Impossível'}
             </button>
           ))}
         </div>
