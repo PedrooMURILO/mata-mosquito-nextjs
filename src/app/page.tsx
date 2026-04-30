@@ -19,16 +19,32 @@ function gerarMosquitos(): MosquitoDecorativo[] {
 }
 
 export default function MenuPage() {
+  const DICAS = [
+    'Elimine água parada em vasos de plantas, pneus e calhas — são os principais criadouros do mosquito.',
+    "Mantenha caixas d'água sempre tampadas e vedadas corretamente.",
+    'Coloque areia nos pratinhos de vasos de plantas em vez de água.',
+    'Limpe calhas e ralos regularmente para evitar acúmulo de água.',
+    'Descarte corretamente garrafas, latas e embalagens que possam acumular água.',
+    'Use repelente regularmente, especialmente em crianças e idosos.',
+    'Instale telas em janelas e portas para impedir a entrada do mosquito.',
+    'O mosquito da dengue pica principalmente durante o dia — fique atento!',
+    'Ao viajar, verifique se o destino tem registro de dengue e tome precauções.',
+    'Febre alta, dor de cabeça e manchas na pele? Procure um médico imediatamente.',
+  ]
+
   const router = useRouter()
   const [nivel, setNivel] = useState('')
   const [username, setUsername] = useState<string | null>(null)
   const [mosquitos, setMosquitos] = useState<MosquitoDecorativo[]>([])
+  const [dica, setDica] = useState('')
   const [toast, setToast] = useState(false)
   const [shake, setShake] = useState(false)
 
   useEffect(() => {
     setUsername(sessionStorage.getItem('username'))
     setMosquitos(gerarMosquitos())
+    const dicaAleatoria = DICAS[Math.floor(Math.random() * DICAS.length)]
+    setDica(dicaAleatoria)
   }, [])
 
   function iniciarJogo() {
@@ -76,11 +92,8 @@ export default function MenuPage() {
         </div>
 
         <div className="mission-box">
-          <h5>📍 Missão do Dia</h5>
-          <p>
-            João Farias está fazendo uma limpa no fundo da casa dele e precisa enfrentar a dengue.
-            Ajude-o nesta batalha!
-          </p>
+          <h5>Dica contra a Dengue</h5>
+          <p>{dica}</p>
         </div>
 
         <div className={`difficulty-container${shake ? ' shake' : ''}`}>
