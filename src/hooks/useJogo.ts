@@ -55,6 +55,12 @@ const TAMANHO_PX: Record<TamanhoMosquito, number> = {
   mosquito3: 90,
 }
 
+const KILLS_PARA_VITORIA: Record<string, number> = {
+  normal: 30,
+  dificil: 20,
+  chucknorris: 15,
+}
+
 function posicaoAleatoria(tamanho: TamanhoMosquito) {
   const px = TAMANHO_PX[tamanho]
   return {
@@ -98,8 +104,9 @@ export function useJogo() {
     killsRef.current = novosKills
     setKills(novosKills)
 
-    // Ao atingir 50 kills, entra na fase bônus — sem parar o jogo
-    if (novosKills >= 50 && !faseBonusRef.current) {
+    const killsAlvo = KILLS_PARA_VITORIA[nivel] ?? 30
+
+    if (novosKills >= killsAlvo && !faseBonusRef.current) {
       faseBonusRef.current = true
       setFaseBonus(true)
     }
@@ -222,6 +229,7 @@ export function useJogo() {
     faseBonus,
     insetos,
     nivel,
+    killsAlvo: KILLS_PARA_VITORIA[nivel] ?? 30,
     clicarMosquito,
     clicarBorboleta,
   }

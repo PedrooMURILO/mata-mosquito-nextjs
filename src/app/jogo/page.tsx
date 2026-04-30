@@ -6,8 +6,9 @@ import { Painel } from '@/components/Painel'
 import { useAuth } from '@/lib/useAuth'
 
 export default function JogoPage() {
-  const { username } = useAuth()
-  const { vidas, kills, score, faseBonus, insetos, clicarMosquito, clicarBorboleta } = useJogo()
+  useAuth()
+  const { vidas, kills, score, faseBonus, insetos, killsAlvo, clicarMosquito, clicarBorboleta } =
+    useJogo()
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
@@ -37,7 +38,13 @@ export default function JogoPage() {
         )}
       </div>
 
-      <Painel vidas={vidas} kills={kills} score={score} faseBonus={faseBonus} />
+      <Painel
+        vidas={vidas}
+        kills={kills}
+        score={score}
+        faseBonus={faseBonus}
+        killsAlvo={killsAlvo}
+      />
     </div>
   )
 }

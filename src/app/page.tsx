@@ -43,8 +43,16 @@ export default function MenuPage() {
   useEffect(() => {
     setUsername(sessionStorage.getItem('username'))
     setMosquitos(gerarMosquitos())
-    const dicaAleatoria = DICAS[Math.floor(Math.random() * DICAS.length)]
-    setDica(dicaAleatoria)
+
+    // Define a primeira dica
+    setDica(DICAS[Math.floor(Math.random() * DICAS.length)])
+
+    // Troca a dica a cada 5 segundos
+    const intervalo = setInterval(() => {
+      setDica(DICAS[Math.floor(Math.random() * DICAS.length)])
+    }, 5000)
+
+    return () => clearInterval(intervalo)
   }, [])
 
   function iniciarJogo() {
@@ -85,7 +93,7 @@ export default function MenuPage() {
       </div>
 
       {/* Card central */}
-      <div className="custom-card" style={{ minWidth: 380 }}>
+      <div className="custom-card" style={{ width: 700, minWidth: 700 }}>
         <div className="game-title">
           MATA <br />
           <span style={{ color: '#fff' }}>MOSQUITO</span>

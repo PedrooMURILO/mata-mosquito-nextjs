@@ -3,9 +3,10 @@ interface PainelProps {
   kills: number
   score: number
   faseBonus: boolean
+  killsAlvo: number
 }
 
-export function Painel({ vidas, kills, score, faseBonus }: PainelProps) {
+export function Painel({ vidas, kills, score, faseBonus, killsAlvo }: PainelProps) {
   return (
     <div className="painel">
       <div className="vidas">
@@ -18,10 +19,13 @@ export function Painel({ vidas, kills, score, faseBonus }: PainelProps) {
         ))}
       </div>
       <div className="cronometro">
-        {faseBonus
-          ? <span style={{ color: '#f1c40f' }}>🎯 BÔNUS!</span>
-          : <span>{kills} / 50 mosquitos</span>
-        }
+        {faseBonus ? (
+          <span style={{ color: '#f1c40f' }}>🎯 BÔNUS!</span>
+        ) : (
+          <span>
+            {kills} / {killsAlvo} mosquitos
+          </span>
+        )}
       </div>
       <div className="cronometro">
         Score: <strong>{score}</strong>
