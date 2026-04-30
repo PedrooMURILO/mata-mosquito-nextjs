@@ -14,7 +14,7 @@ export function Mosquito({ id, tamanho, lado, x, y, onClicar }: MosquitoProps) {
     <img
       src="/imagens/mosquito.png"
       className={`${tamanho} ${lado}`}
-      style={{ position: 'absolute', left: x, top: y, cursor: 'pointer' }}
+      style={{ position: 'absolute', left: x, top: y }}
       onClick={() => onClicar(id, tamanho)}
     />
   )

@@ -14,7 +14,7 @@ export function Borboleta({ id, tamanho, lado, x, y, onClicar }: BorboletaProps)
     <img
       src="/imagens/borboleta.png"
       className={`${tamanho} ${lado}`}
-      style={{ position: 'absolute', left: x, top: y, cursor: 'pointer' }}
+      style={{ position: 'absolute', left: x, top: y }}
       onClick={() => onClicar(id)}
     />
   )
