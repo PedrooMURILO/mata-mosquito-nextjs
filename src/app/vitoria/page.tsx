@@ -2,8 +2,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/lib/useAuth'
 
 export default function VitoriaPage() {
+  const { username } = useAuth()
   const router = useRouter()
   const [score, setScore] = useState(0)
   const [kills, setKills] = useState(0)
@@ -41,14 +43,38 @@ export default function VitoriaPage() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}
+    >
       <div className="custom-card" style={{ minWidth: 380, textAlign: 'center' }}>
         <div className="vitoria-texto">VITÓRIA!</div>
 
-        <div style={{ color: '#fff', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span>Mosquitos mortos: <strong style={{ color: '#f1c40f' }}>{kills}</strong></span>
-          <span>Score final: <strong style={{ color: '#f1c40f' }}>{score}</strong></span>
-          {salvando && <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>Salvando score...</span>}
+        <div
+          style={{
+            color: '#fff',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+          }}
+        >
+          <span>
+            Mosquitos mortos: <strong style={{ color: '#f1c40f' }}>{kills}</strong>
+          </span>
+          <span>
+            Score final: <strong style={{ color: '#f1c40f' }}>{score}</strong>
+          </span>
+          {salvando && (
+            <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>
+              Salvando score...
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>

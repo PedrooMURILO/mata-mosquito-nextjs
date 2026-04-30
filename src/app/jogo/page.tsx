@@ -3,8 +3,10 @@ import { useJogo } from '@/hooks/useJogo'
 import { Mosquito } from '@/components/Mosquito'
 import { Borboleta } from '@/components/Borboleta'
 import { Painel } from '@/components/Painel'
+import { useAuth } from '@/lib/useAuth'
 
 export default function JogoPage() {
+  const { username } = useAuth()
   const { vidas, kills, score, faseBonus, insetos, clicarMosquito, clicarBorboleta } = useJogo()
 
   return (
