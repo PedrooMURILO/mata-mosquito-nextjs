@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { loginUser, registerUser } from '@/app/actions'
 
 interface MosquitoDecorativo {
   id: number
@@ -39,24 +39,11 @@ export default function LoginPage() {
     }
 
     if (modo === 'cadastro') {
-      const { error } = await supabase
-        .from('users')
-        .insert({ username, password: senha })
-
-      if (error) {
-        if (error.code === '23505') return setErro('Nome de usuário já existe')
-        console.log(error)
-        return setErro('Erro ao cadastrar')
-      }
+      const res = await registerUser(username, senha)
+      if (res.error) return setErro(res.error)
     } else {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('username', username)
-        .eq('password', senha)
-        .single()
-
-      if (error || !data) return setErro('Usuário ou senha incorretos')
+      const res = await loginUser(username, senha)
+      if (res.error) return setErro(res.error)
     }
 
     document.cookie = `username=${username}; path=/`

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { saveScore } from '@/app/actions'
 import { useAuth } from '@/lib/useAuth'
 
 export default function GameOverPage() {
@@ -21,21 +21,7 @@ export default function GameOverPage() {
     setKills(k)
 
     async function salvarScore() {
-      const { data: usuario } = await supabase
-        .from('users')
-        .select('id')
-        .eq('username', username)
-        .single()
-
-      await supabase.from('scores').insert({
-        user_id: usuario?.id ?? null,
-        username,
-        score: s,
-        kills: k,
-        nivel,
-        resultado: 'derrota',
-      })
-
+      await saveScore(username, s, k, nivel, 'derrota')
       setSalvando(false)
     }
 

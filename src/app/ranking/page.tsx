@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { getRanking } from '@/app/actions'
 
 interface ScoreEntry {
   id: string
@@ -113,21 +113,8 @@ export default function RankingPage() {
 
   useEffect(() => {
     async function buscarScores() {
-      const resultados: Record<string, ScoreEntry[]> = {}
-
-      await Promise.all(
-        NIVEIS.map(async ({ key }) => {
-          const { data } = await supabase
-            .from('scores')
-            .select('*')
-            .eq('nivel', key)
-            .order('score', { ascending: false })
-            .limit(5)
-
-          resultados[key] = data ?? []
-        })
-      )
-
+      const chavesNiveis = NIVEIS.map(n => n.key)
+      const resultados = await getRanking(chavesNiveis)
       setDados(resultados)
       setCarregando(false)
     }
